@@ -1,29 +1,33 @@
-pipeline{
-    agent { label 'dev'}
 
-    stages{
-        stage('code'){
-          steps{
-             git url:'https://github.com/Ephysokka/3mtt-capstone-project.git', branch: 'main'
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/Ephysokka/3mtt-capstone-project-app.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ephysokka/nodejs-app:latest .'
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockerhub-credentials') {
+                    sh 'docker push ephysokka/nodejs-app:latest'
                 }
+            }
         }
-        stage('Build'){
-          steps{
-              echo 'Building the application...' 
-              sh 'npm install'
-          }
-        }
-        stage('Test'){
-          steps{
-              echo 'Testing the application...'
-              sh 'npm test'
-          }
-        }
-        stage('Deploy'){
-          steps{
-              echo 'Deploying the application...'
-              sh 'npm run deploy'
-          }
+        stage('Deploy') {
+            steps {
+                sh '''
+                docker stop nodejs-app || true
+                docker rm nodejs-app || true
+                docker run -d --name nodejs-app -p 8080:8080 ephysokka/nodejs-app:latest
+                '''
+            }
         }
     }
 }
