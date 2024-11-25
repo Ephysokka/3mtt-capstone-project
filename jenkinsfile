@@ -10,22 +10,22 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ephysokka/nodejs-app:latest .'
+                sh 'docker build -t latest .'
             }
         }
         stage('Push to Docker Hub') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-credentials') {
-                    sh 'docker push ephysokka/nodejs-app:latest'
+                    sh 'docker push latest'
                 }
             }
         }
         stage('Deploy') {
             steps {
                 sh '''
-                docker stop nodejs-app || true
-                docker rm nodejs-app || true
-                docker run -d --name nodejs-app -p 8080:8080 ephysokka/nodejs-app:latest
+                docker stop latest || true
+                docker rm latest || true
+                docker run -d --name latest -p 8080:8080 ephysokka/nodejs-app:latest
                 '''
             }
         }
