@@ -66,7 +66,7 @@ resource "aws_security_group" "app_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["192.168.0.195/32"]
+    cidr_blocks = ["102.91.71.48/32"]
   }
 
   egress {
@@ -105,3 +105,4 @@ resource "aws_instance" "app_server" {
     Name = "${var.project_name}-server"
   }
 }
+
