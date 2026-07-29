@@ -100,6 +100,7 @@ resource "aws_instance" "app_server" {
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.app_sg.id]
+  key_name               = var.instance_key_name
 
   tags = {
     Name = "${var.project_name}-server"
