@@ -12,3 +12,8 @@ variable "instance_type" {
   type    = string
   default = "t3.micro"
 }
+
+variable "instance_key_name" {
+  type     = string
+  default  = "my_ec2_key"
+ }
